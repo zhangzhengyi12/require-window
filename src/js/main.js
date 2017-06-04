@@ -12,37 +12,37 @@ require.config({
     require(["jquery", "wiw"],function ($,w) {
     // console.log();
     
-    //$('a').click(function () {
-    //    var win = new w.window();
-    //    win.alert(
-    //        {
-    //            "from":{
-    //                "height":200,
-    //                "width":500
-    //            },
-    //            "content":"Hello World",
-    //            "alertBtnHandler":function () {
-    //                alert("alert");
-    //            },
-    //            "closeBtnHandler":function () {
-    //                alert("are you sure");
-    //            },
-    //            "title":"幼稚园杀手",
-    //            "hasCloseBtn":true,
-    //            "skinClassName":null,
-    //            "hasMask":true,
-    //            "alertBtnContent":"accpt",
-    //            "maskFlash":true,
-    //            "isDraggable":true,
-    //            "draggableHandler":".wiw_header",
-    //        }
-    //    ).on("close",function () {
-    //        alert("close to new");
-    //    })
-        //在这里绑定也是完全可以的 所以支持传参和后续绑定 。因为是数组，支持多个事件函数
+    $('.alert').click(function () {
+        var win = new w.window();
+        win.alert(
+            {
+                "from":{
+                    "height":200,
+                    "width":500
+                },
+                "content":"Hello World",
+                "alertBtnHandler":function () {
+                    alert("alert");
+                },
+                "closeBtnHandler":function () {
+                    alert("are you sure");
+                },
+                "title":"幼稚园杀手",
+                "hasCloseBtn":true,
+                "skinClassName":null,
+                "hasMask":true,
+                "alertBtnContent":"accpt",
+                "maskFlash":true,
+                "isDraggable":true,
+                "draggableHandler":".wiw_header",
+            }
+        ).on("close",function () {
+            alert("close to new");
+        })
        
-    //})
-        $('a').click(function () {
+    })
+        
+        $('.confirm').click(function () {
             new w.window().confirm({
                 title:"系统消息",
                 content:"您确定要删除这个文件吗",
@@ -51,6 +51,26 @@ require.config({
                 dragHanle:".wiw_header",
                 hasMask:true,
                 maskFlash:true,
+            }).on("confirm",function () {
+                alert("sure");
+            }).on("cancel",function () {
+                alert("cancel");
+            })
+        })
+    
+        $('.prompt').click(function () {
+            new w.window().prompt({
+                title:"系统消息",
+                content:"输入你的 SSH key",
+                promptBtn:"发送",
+                cancelBtn:"取消",
+                dragHanle:".wiw_header",
+                hasMask:true,
+                maskFlash:true,
+                defauletValuePromptInput:"jkf3j5j6535kjfd45",
+                promptBtnHandler:function (text) {
+                    alert("你属于的key是：" + text);
+                }
             }).on("confirm",function () {
                 alert("sure");
             }).on("cancel",function () {

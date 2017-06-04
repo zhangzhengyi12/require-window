@@ -23,7 +23,13 @@ define(["jquery","jqueryUi","widget"], function ($,$ui,widget) {
              handlerconfirmBtn:null,
              handlercancelBtn:null,
              winType:"alert",
-             alertBtnContent:"确定"
+             alertBtnContent:"确定",
+         //    prompt方法的需求属性
+             promptBtn:"确定",
+             isprmptInputPassWord:false,
+             defauletValuePromptInput:"默认内容",
+             maxlengthPromptInput:10,
+             handlerPromptBtn:null
          };
          
          this.handlers = {
@@ -123,11 +129,19 @@ define(["jquery","jqueryUi","widget"], function ($,$ui,widget) {
             
             var footer = "";
             
-            console.log(this.config.winType);
             if(this.config.winType === "alert"){
+                
                 footer = "<input type='button' value='" + this.config.alertBtnContent + "' class='wiw_alertBtn'>";
             }else if(this.config.winType ==="confirm"){
+                
                 footer = "<input type='button' value='" + this.config.confirmBtn + "' class='wiw_confirmBtn'><input type='button' value='" + this.config.cancelBtn + "' class='wiw_cancelBtn'>";
+                
+            }else if(this.config.winType === "prompt"){
+                console.log(1);
+                this.config.content +='<p class="wiw_promptInputWrapper"><input type="' + (this.config.isprmptInputPassWord ? "password" : "text") + '" value="' + this.config.defauletValuePromptInput + '" maxlength="' + this.config.maxlengthPromptInput + '" class="wiw_promptInput"></p>';
+                
+                footer = '<input type="button" value="' + this.config.promptBtn + '" class="wiw_promptBtn"><input type="button" value="' + this.config.cancelBtn + '"  class="wiw_cancelBtn">';
+                
             }
             
             
@@ -137,7 +151,9 @@ define(["jquery","jqueryUi","widget"], function ($,$ui,widget) {
                 "<div class='wiw_footer'>" + footer + "</div>" +
                 "</div>");
     
-
+            this._promptInput = this.boundingBox.find(".wiw_promptInput");
+            
+            
             if (this.config.hasMask) {
                 this._mask = $("<div class='wiw_mask'></div>");
                 if (this.config.maskFlash) {
@@ -176,12 +192,16 @@ define(["jquery","jqueryUi","widget"], function ($,$ui,widget) {
             }).delegate(".wiw_cancelBtn","click",function () {
                 that.fire("cancel");
                 that.destory();
+            }).delegate(".wiw_promptBtn","click",function () {
+                that.fire("prompt",that._promptInput.val());
+                that.destory();
             })
     
             this.config.alertBtnHandler&&this.on("alert",this.config.alertBtnHandler);
             this.config.closeBtnHandler&&this.on("close",this.config.closeBtnHandler);
             this.config.closeBtnHandler&&this.on("confirm",this.config.closeBtnHandler);
             this.config.closeBtnHandler&&this.on("cancel",this.config.closeBtnHandler);
+            this.config.promptBtnHandler&&this.on("prompt",this.config.promptBtnHandler);
         },
         syncUI:function () {
             /*
@@ -220,6 +240,11 @@ define(["jquery","jqueryUi","widget"], function ($,$ui,widget) {
         confirm:function (cfg) {
             $.extend(true,this.config,cfg,{winType:"confirm"});
             this.render();
+            return this;
+        },prompt:function (cfg) {
+            $.extend(true,this.config,cfg,{winType:"prompt"});
+            this.render();
+            this._promptInput.focus();
             return this;
         }
     })

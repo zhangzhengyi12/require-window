@@ -20,6 +20,7 @@ define(["jquery"],function ($) {
         },
         fire:function (type,data) {
             //检测相应类型数组是否存在 存在则全部吐出来执行
+            //如果传进来了输入就放入参数之中调用
             if(this.handlers[type] instanceof Array){
                 console.log("fire");
                 var handlers = this.handlers[type];
